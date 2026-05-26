@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Spirit Box · Portal Espiritual</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Raleway:wght@300;400&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{--purple:#9b6dff;--gold:#d4a843;--dark:#060410;--border-p:rgba(155,109,255,0.3);--border-g:rgba(212,168,67,0.3);--text:#e0d0f0;--muted:#8a7a9b;}
+body{background:var(--dark);color:var(--text);font-family:'Raleway',sans-serif;min-height:100vh;}
+.stars{position:fixed;top:0;left:0;right:0;bottom:0;pointer-events:none;z-index:0;}
+.star{position:absolute;background:#fff;border-radius:50%;animation:twinkle var(--d) ease-in-out infinite alternate;}
+@keyframes twinkle{from{opacity:0.05;}to{opacity:0.6;}}
+.wrap{position:relative;z-index:1;max-width:480px;margin:0 auto;padding:1.5rem 1rem 3rem;display:flex;flex-direction:column;align-items:center;}
+nav{width:100%;display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:0.5px solid var(--border-p);}
+.nav-logo{font-family:'Cinzel',serif;font-size:13px;letter-spacing:3px;color:var(--gold);text-decoration:none;}
+.back-btn{background:none;border:0.5px solid var(--border-p);border-radius:20px;color:var(--purple);font-size:11px;letter-spacing:1px;padding:5px 12px;cursor:pointer;font-family:'Raleway',sans-serif;}
+.page-title{font-family:'Cinzel',serif;font-size:20px;letter-spacing:4px;color:var(--purple);text-align:center;margin-bottom:0.3rem;}
+.page-sub{font-size:10px;letter-spacing:3px;color:var(--muted);text-align:center;margin-bottom:1.5rem;}
+.name-input{width:100%;background:rgba(155,109,255,0.06);border:0.5px solid var(--border-p);border-radius:25px;color:var(--text);font-family:'Cinzel',serif;font-size:14px;letter-spacing:2px;padding:12px 20px;outline:none;text-align:center;transition:all 0.3s;margin-bottom:1.2rem;}
+.name-input::placeholder{color:#3a2e5a;letter-spacing:2px;}
+.name-input:focus{border-color:rgba(155,109,255,0.7);box-shadow:0 0 20px rgba(155,109,255,0.15);}
+.viz-wrap{width:100%;height:70px;background:rgba(0,0,0,0.4);border-radius:12px;border:0.5px solid var(--border-p);overflow:hidden;margin-bottom:1rem;position:relative;}
+#vizCanvas{width:100%;height:100%;}
+.freq-live{position:absolute;top:6px;right:10px;font-size:10px;letter-spacing:2px;color:rgba(155,109,255,0.6);}
+.status-ring{width:110px;height:110px;margin:0.8rem 0;position:relative;display:flex;align-items:center;justify-content:center;}
+.ring{position:absolute;border-radius:50%;border:1px solid;animation:spin var(--s) linear infinite;}
+.r1{width:110px;height:110px;border-color:rgba(155,109,255,0.25);--s:8s;}
+.r2{width:82px;height:82px;border-color:rgba(212,168,67,0.15);--s:5s;animation-direction:reverse;}
+.r3{width:54px;height:54px;border-color:rgba(155,109,255,0.35);--s:3s;border-style:dashed;}
+.orb{width:22px;height:22px;border-radius:50%;background:rgba(155,109,255,0.25);border:1px solid rgba(155,109,255,0.7);transition:all 0.5s;}
+.orb.active{background:rgba(155,109,255,0.8);box-shadow:0 0 18px rgba(155,109,255,0.6);}
+@keyframes spin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+.ctrl-row{display:flex;gap:8px;width:100%;margin-bottom:0.8rem;}
+.ctrl-btn{flex:1;background:rgba(155,109,255,0.07);border:0.5px solid var(--border-p);border-radius:10px;color:var(--purple);font-family:'Raleway',sans-serif;font-size:11px;letter-spacing:1px;padding:9px 6px;cursor:pointer;transition:all 0.3s;text-align:center;}
+.ctrl-btn:hover,.ctrl-btn.on{background:rgba(155,109,255,0.2);border-color:var(--purple);}
+.sliders{width:100%;display:flex;flex-direction:column;gap:10px;margin-bottom:1rem;}
+.slider-row{display:flex;align-items:center;gap:10px;}
+.sl-label{font-size:11px;color:var(--muted);letter-spacing:1px;min-width:72px;}
+.slider-row input[type=range]{flex:1;}
+.sl-val{font-size:11px;color:var(--purple);min-width:20px;text-align:right;}
+.sweep-bar{width:100%;height:3px;background:rgba(255,255,255,0.05);border-radius:2px;overflow:hidden;margin-bottom:1rem;}
+.sweep-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--purple),var(--gold));border-radius:2px;}
+.start-btn{width:100%;padding:13px;background:rgba(155,109,255,0.1);border:0.5px solid var(--border-p);border-radius:25px;color:#c4a0ff;font-family:'Cinzel',serif;font-size:14px;letter-spacing:3px;cursor:pointer;transition:all 0.4s;margin-bottom:1.2rem;}
+.start-btn:hover{background:rgba(155,109,255,0.22);}
+.start-btn.running{background:rgba(200,50,50,0.12);border-color:rgba(200,100,100,0.4);color:#f0a0a0;}
+.session-log{width:100%;background:rgba(6,4,16,0.9);border:0.5px solid var(--border-p);border-radius:14px;padding:1rem;min-height:140px;max-height:220px;overflow-y:auto;margin-bottom:1rem;scrollbar-width:thin;scrollbar-color:rgba(155,109,255,0.2) transparent;}
+.log-entry{font-size:12px;letter-spacing:1px;margin-bottom:8px;padding:6px 10px;border-radius:8px;border-left:2px solid;}
+.log-entry.system{color:#5a4e7a;border-color:rgba(90,78,122,0.4);font-style:italic;}
+.log-entry.detection{color:#c4a0ff;border-color:rgba(155,109,255,0.6);animation:fadein 0.5s ease;}
+.log-entry.strong{color:#f0d080;border-color:rgba(212,168,67,0.8);font-weight:500;animation:fadein 0.3s ease;}
+@keyframes fadein{from{opacity:0;transform:translateX(-5px);}to{opacity:1;transform:translateX(0);}}
+.divider{width:60px;height:0.5px;background:linear-gradient(90deg,transparent,var(--border-p),transparent);margin:1.2rem 0;}
+.symbols{font-size:14px;color:rgba(155,109,255,0.25);letter-spacing:6px;}
+.note{font-size:10px;color:#3a2e5a;text-align:center;margin-top:1rem;letter-spacing:1px;line-height:1.6;max-width:340px;}
+</style>
+</head>
+<body>
+<div class="stars" id="stars"></div>
+<div class="wrap">
+  <nav>
+    <a class="nav-logo" href="index.html">✦ PORTAL ESPIRITUAL</a>
+    <button class="back-btn" onclick="window.location.href='index.html'">← Volver</button>
+  </nav>
+
+  <div class="page-title">SPIRIT BOX</div>
+  <div class="page-sub">Sesión de escucha · Listening session</div>
+
+  <input class="name-input" id="nameInput" placeholder="Nombre del ser querido..." maxlength="40"/>
+
+  <div class="viz-wrap">
+    <canvas id="vizCanvas"></canvas>
+    <div class="freq-live" id="freqLive">— Hz</div>
+  </div>
+
+  <div class="status-ring">
+    <div class="ring r1"></div>
+    <div class="ring r2"></div>
+    <div class="ring r3"></div>
+    <div class="orb" id="orb"></div>
+  </div>
+
+  <div class="ctrl-row">
+    <button class="ctrl-btn on" id="btnW" onclick="toggleLayer('white',this)">Ruido blanco</button>
+    <button class="ctrl-btn on" id="btnS" onclick="toggleLayer('sweep',this)">Barrido FM</button>
+    <button class="ctrl-btn on" id="btnB" onclick="toggleLayer('binaural',this)">Binaural</button>
+  </div>
+
+  <div class="sliders">
+    <div class="slider-row"><span class="sl-label">Velocidad</span><input type="range" min="1" max="10" value="4" id="sSpeed" oninput="sweepSpeed=parseInt(this.value);document.getElementById('vSpeed').textContent=this.value"/><span class="sl-val" id="vSpeed">4</span></div>
+    <div class="slider-row"><span class="sl-label">Intensidad</span><input type="range" min="1" max="10" value="5" id="sInt" oninput="updateInt(this.value)"/><span class="sl-val" id="vInt">5</span></div>
+    <div class="slider-row"><span class="sl-label">Umbral</span><input type="range" min="1" max="10" value="5" id="sThr" oninput="thrVal=parseInt(this.value);document.getElementById('vThr').textContent=this.value"/><span class="sl-val" id="vThr">5</span></div>
+  </div>
+
+  <div class="sweep-bar"><div class="sweep-fill" id="sweepFill"></div></div>
+  <button class="start-btn" id="startBtn" onclick="toggleSession()">✦ INICIAR SESIÓN ✦</button>
+
+  <div class="session-log" id="sessionLog">
+    <div class="log-entry system">— Sistema listo. Escribe un nombre e inicia la sesión —</div>
+    <div class="log-entry system">— System ready. Enter a name and start the session —</div>
+  </div>
+
+  <div class="divider"></div>
+  <div class="symbols">☽ ✦ ψ ✦ ☉</div>
+  <div class="note">La pareidolia auditiva es el fenómeno por el cual la mente percibe patrones en el ruido. Usa audífonos para la mejor experiencia.</div>
+</div>
+
+<script>
+const current=JSON.parse(localStorage.getItem('pe_current')||'null');
+if(!current) window.location.href='index.html';
+
+const starsBg=document.getElementById('stars');
+for(let i=0;i<60;i++){const s=document.createElement('div');s.className='star';const sz=Math.random()*1.5+0.5;s.style.cssText=`width:${sz}px;height:${sz}px;top:${Math.random()*100}%;left:${Math.random()*100}%;--d:${(Math.random()*4+2).toFixed(1)}s;animation-delay:${(Math.random()*4).toFixed(1)}s`;starsBg.appendChild(s);}
+
+let audioCtx=null,running=false,whiteNode=null,sweepOsc=null,sweepGain=null,binL=null,binR=null,merger=null,masterGain=null,analyser=null;
+let layers={white:true,sweep:true,binaural:true};
+let sweepSpeed=4,intVal=5,thrVal=5,sweepPhase=0,lastDet=0;
+
+const canvas=document.getElementById('vizCanvas');const ctx=canvas.getContext('2d');
+
+function initAudio(){if(audioCtx)return;audioCtx=new(window.AudioContext||window.webkitAudioContext)();analyser=audioCtx.createAnalyser();analyser.fftSize=256;masterGain=audioCtx.createGain();masterGain.gain.value=0.18;masterGain.connect(analyser);analyser.connect(audioCtx.destination);}
+
+function startWhite(){if(whiteNode)return;const bs=4096;whiteNode=audioCtx.createScriptProcessor(bs,1,1);whiteNode.onaudioprocess=e=>{const o=e.outputBuffer.getChannelData(0);for(let i=0;i<bs;i++)o[i]=(Math.random()*2-1)*0.5;};whiteNode.connect(masterGain);}
+function stopWhite(){if(whiteNode){whiteNode.disconnect();whiteNode=null;}}
+function startSweep(){if(sweepOsc)return;sweepOsc=audioCtx.createOscillator();sweepGain=audioCtx.createGain();sweepGain.gain.value=0.25;sweepOsc.type='sawtooth';sweepOsc.frequency.value=200;sweepOsc.connect(sweepGain);sweepGain.connect(masterGain);sweepOsc.start();}
+function stopSweep(){if(sweepOsc){sweepOsc.stop();sweepOsc.disconnect();sweepOsc=null;sweepGain&&sweepGain.disconnect();sweepGain=null;}}
+function startBin(){if(binL)return;merger=audioCtx.createChannelMerger(2);merger.connect(masterGain);binL=audioCtx.createOscillator();binR=audioCtx.createOscillator();const gL=audioCtx.createGain(),gR=audioCtx.createGain();gL.gain.value=0.15;gR.gain.value=0.15;binL.frequency.value=136.1;binR.frequency.value=143.1;binL.connect(gL);gL.connect(merger,0,0);binR.connect(gR);gR.connect(merger,0,1);binL.start();binR.start();}
+function stopBin(){if(binL){binL.stop();binL.disconnect();binL=null;}if(binR){binR.stop();binR.disconnect();binR=null;}if(merger){merger.disconnect();merger=null;}}
+
+function toggleLayer(layer,btn){layers[layer]=!layers[layer];btn.classList.toggle('on',layers[layer]);if(!running)return;if(layer==='white')layers[layer]?startWhite():stopWhite();if(layer==='sweep')layers[layer]?startSweep():stopSweep();if(layer==='binaural')layers[layer]?startBin():stopBin();}
+function updateInt(v){intVal=parseInt(v);document.getElementById('vInt').textContent=v;if(masterGain)masterGain.gain.value=0.1+(intVal*0.025);}
+
+function addLog(text,type='system'){const log=document.getElementById('sessionLog');const entry=document.createElement('div');entry.className='log-entry '+type;const t=new Date();const ts=`${t.getHours().toString().padStart(2,'0')}:${t.getMinutes().toString().padStart(2,'0')}:${t.getSeconds().toString().padStart(2,'0')}`;entry.textContent=`[${ts}] ${text}`;log.appendChild(entry);log.scrollTop=log.scrollHeight;}
+
+const detMsgs=[['Fluctuación detectada en 87 MHz','detection'],['Patrón de energía inusual — canal 3','detection'],['Señal débil en frecuencia base','detection'],['Resonancia detectada','detection'],['Interferencia en banda espiritual','detection'],['Eco de energía residual','detection'],['Variación en el ruido de fondo','detection'],['Pulso detectado — 7 Hz','detection'],['Presencia energética registrada','strong'],['Actividad inusual en el espectro','strong'],['Pico de señal detectado','strong']];
+
+function randomDet(){
+  const name=document.getElementById('nameInput').value.trim();
+  const now=Date.now();const minGap=Math.max(2000,(11-thrVal)*1500);
+  if(now-lastDet<minGap)return;
+  const roll=Math.random();const chance=0.08+(intVal*0.015);
+  if(roll<chance){
+    lastDet=now;
+    const pool=thrVal>6?detMsgs:detMsgs.slice(0,7);
+    const pick=pool[Math.floor(Math.random()*pool.length)];
+    const msg=name&&Math.random()<0.3?`${pick[0]} — ${name}...`:pick[0];
+    addLog(msg,pick[1]);
+    if(pick[1]==='strong'){const orb=document.getElementById('orb');orb.style.background='rgba(212,168,67,0.9)';orb.style.boxShadow='0 0 25px rgba(212,168,67,0.8)';setTimeout(()=>{orb.style.background='rgba(155,109,255,0.8)';orb.style.boxShadow='0 0 18px rgba(155,109,255,0.6)';},800);}
+  }
+}
+
+function animSweep(){
+  if(!running)return;
+  sweepPhase+=sweepSpeed*0.5;if(sweepPhase>100)sweepPhase=0;
+  document.getElementById('sweepFill').style.width=sweepPhase+'%';
+  if(sweepOsc){const freq=100+Math.sin(sweepPhase*0.063)*800+Math.random()*50;sweepOsc.frequency.setTargetAtTime(freq,audioCtx.currentTime,0.05);document.getElementById('freqLive').textContent=Math.round(freq)+' Hz';}
+  randomDet();setTimeout(animSweep,80);
+}
+
+function drawViz(){
+  if(!analyser){requestAnimationFrame(drawViz);return;}
+  canvas.width=canvas.offsetWidth;canvas.height=canvas.offsetHeight;
+  const data=new Uint8Array(analyser.frequencyBinCount);analyser.getByteFrequencyData(data);
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  const bars=data.length/2,bw=canvas.width/bars;
+  for(let i=0;i<bars;i++){const v=data[i]/255;const h=v*canvas.height;const a=running?0.4+v*0.6:0.1+v*0.2;ctx.fillStyle=`rgba(155,109,255,${a})`;ctx.fillRect(i*bw,canvas.height-h,bw-1,h);}
+  if(!running){ctx.fillStyle='rgba(90,78,122,0.15)';for(let i=0;i<bars;i++){const h=Math.random()*5;ctx.fillRect(i*bw,canvas.height-h,bw-1,h);}}
+  requestAnimationFrame(drawViz);
+}
+drawViz();
+
+async function toggleSession(){
+  const btn=document.getElementById('startBtn');const orb=document.getElementById('orb');
+  if(!running){
+    initAudio();if(audioCtx.state==='suspended')await audioCtx.resume();
+    running=true;btn.textContent='■ DETENER SESIÓN ■';btn.classList.add('running');orb.classList.add('active');
+    if(layers.white)startWhite();if(layers.sweep)startSweep();if(layers.binaural)startBin();
+    masterGain.gain.value=0.1+(intVal*0.025);sweepPhase=0;
+    const name=document.getElementById('nameInput').value.trim();
+    addLog(name?`Sesión iniciada — buscando: ${name}`:'Sesión iniciada — escuchando...','system');
+    addLog('Calibrando frecuencias...','system');
+    setTimeout(()=>addLog('Canal espiritual abierto ✦','system'),1500);
+    animSweep();
+  } else {
+    running=false;btn.textContent='✦ INICIAR SESIÓN ✦';btn.classList.remove('running');orb.classList.remove('active');
+    stopWhite();stopSweep();stopBin();
+    document.getElementById('sweepFill').style.width='0%';document.getElementById('freqLive').textContent='— Hz';
+    addLog('— Sesión finalizada —','system');
+  }
+}
+</script>
+</body>
+</html>

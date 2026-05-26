@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Oráculo · Portal Espiritual</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Raleway:wght@300;400&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{--gold:#d4a843;--dark:#060410;--card:rgba(15,10,30,0.9);--border-gold:rgba(212,168,67,0.3);--text:#e8d5b7;--muted:#8a7a9b;}
+body{background:var(--dark);color:var(--text);font-family:'Raleway',sans-serif;min-height:100vh;}
+.stars{position:fixed;top:0;left:0;right:0;bottom:0;pointer-events:none;z-index:0;}
+.star{position:absolute;background:#fff;border-radius:50%;animation:twinkle var(--d) ease-in-out infinite alternate;}
+@keyframes twinkle{from{opacity:0.05;}to{opacity:0.7;}}
+.wrap{position:relative;z-index:1;max-width:480px;margin:0 auto;padding:1.5rem 1rem 3rem;display:flex;flex-direction:column;align-items:center;}
+nav{width:100%;display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:0.5px solid var(--border-gold);}
+.nav-logo{font-family:'Cinzel',serif;font-size:13px;letter-spacing:3px;color:var(--gold);text-decoration:none;}
+.back-btn{background:none;border:0.5px solid var(--border-gold);border-radius:20px;color:var(--gold);font-size:11px;letter-spacing:1px;padding:5px 12px;cursor:pointer;font-family:'Raleway',sans-serif;}
+.mandala-wrap{width:100px;height:100px;margin-bottom:1rem;}
+.page-title{font-family:'Cinzel',serif;font-size:20px;letter-spacing:4px;color:var(--gold);text-align:center;margin-bottom:0.3rem;}
+.page-sub{font-size:10px;letter-spacing:3px;color:var(--muted);text-align:center;margin-bottom:1.5rem;}
+.freq-display{display:flex;gap:8px;margin-bottom:0.8rem;flex-wrap:wrap;justify-content:center;}
+.freq-btn{background:rgba(255,255,255,0.04);border:0.5px solid var(--border-gold);border-radius:20px;color:#c9b07a;font-size:11px;letter-spacing:1px;padding:5px 12px;cursor:pointer;transition:all 0.3s;font-family:'Raleway',sans-serif;}
+.freq-btn.active,.freq-btn:hover{background:rgba(212,168,67,0.15);border-color:var(--gold);color:#f0d080;}
+.freq-label{font-size:10px;color:#6b5f7a;letter-spacing:2px;margin-bottom:1rem;text-align:center;}
+.wave-canvas{width:100%;height:40px;margin-bottom:1rem;opacity:0.5;}
+.chat-window{width:100%;background:rgba(10,6,18,0.8);border:0.5px solid rgba(138,122,155,0.25);border-radius:16px;padding:1.25rem;min-height:200px;max-height:350px;overflow-y:auto;margin-bottom:1rem;scrollbar-width:thin;scrollbar-color:rgba(212,168,67,0.2) transparent;}
+.msg{margin-bottom:1rem;line-height:1.7;font-size:14px;}
+.msg.oracle{color:#d4c5a9;border-left:2px solid rgba(212,168,67,0.5);padding-left:12px;}
+.msg.user{color:#8a9cbf;text-align:right;font-style:italic;}
+.msg-name{font-size:10px;letter-spacing:2px;text-transform:uppercase;margin-bottom:4px;opacity:0.6;}
+.oracle .msg-name{color:var(--gold);}
+.user .msg-name{color:#5a7aaa;}
+.typing{display:none;gap:5px;align-items:center;padding:8px 12px;border-left:2px solid rgba(212,168,67,0.3);margin-bottom:1rem;}
+.typing.on{display:flex;}
+.dot{width:6px;height:6px;background:var(--gold);border-radius:50%;animation:pd 1.2s ease-in-out infinite;}
+.dot:nth-child(2){animation-delay:0.2s;}.dot:nth-child(3){animation-delay:0.4s;}
+@keyframes pd{0%,80%,100%{opacity:0.2;transform:scale(0.8);}40%{opacity:1;transform:scale(1.2);}}
+.input-row{display:flex;gap:8px;width:100%;}
+.q-input{flex:1;background:rgba(255,255,255,0.04);border:0.5px solid rgba(138,122,155,0.35);border-radius:25px;color:var(--text);font-family:'Raleway',sans-serif;font-size:14px;padding:10px 18px;outline:none;transition:border-color 0.3s;}
+.q-input::placeholder{color:#5a4e6a;}
+.q-input:focus{border-color:rgba(212,168,67,0.6);}
+.send-btn{width:44px;height:44px;border-radius:50%;background:rgba(212,168,67,0.15);border:0.5px solid rgba(212,168,67,0.5);color:var(--gold);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.3s;flex-shrink:0;}
+.send-btn:hover{background:rgba(212,168,67,0.3);}
+.quick-questions{width:100%;margin-top:1rem;display:flex;flex-direction:column;gap:6px;}
+.quick-q{background:rgba(255,255,255,0.03);border:0.5px solid rgba(138,122,155,0.2);border-radius:10px;color:var(--muted);font-size:12px;letter-spacing:0.5px;padding:8px 14px;cursor:pointer;text-align:left;font-family:'Raleway',sans-serif;transition:all 0.3s;}
+.quick-q:hover{background:rgba(212,168,67,0.08);border-color:var(--border-gold);color:#c9b07a;}
+.divider{width:60px;height:0.5px;background:linear-gradient(90deg,transparent,var(--border-gold),transparent);margin:1.5rem 0;}
+.symbols{font-size:14px;color:rgba(212,168,67,0.25);letter-spacing:6px;}
+</style>
+</head>
+<body>
+<div class="stars" id="stars"></div>
+<div class="wrap">
+  <nav>
+    <a class="nav-logo" href="index.html">✦ PORTAL ESPIRITUAL</a>
+    <button class="back-btn" onclick="window.location.href='index.html'">← Volver</button>
+  </nav>
+
+  <div class="mandala-wrap">
+    <svg width="100" height="100" viewBox="0 0 100 100">
+      <g transform="translate(50,50)">
+        <circle r="5" fill="rgba(212,168,67,0.8)"/>
+        <circle r="14" fill="none" stroke="rgba(212,168,67,0.4)" stroke-width="0.5"/>
+        <circle r="24" fill="none" stroke="rgba(180,120,200,0.3)" stroke-width="0.5" stroke-dasharray="3 5"/>
+        <circle r="36" fill="none" stroke="rgba(212,168,67,0.2)" stroke-width="0.5"/>
+        <g id="petals"></g><g id="dots"></g>
+      </g>
+    </svg>
+  </div>
+
+  <div class="page-title">ORÁCULO ESPIRITUAL</div>
+  <div class="page-sub">Ancient Wisdom · Sabiduría Antigua</div>
+
+  <div class="freq-display">
+    <button class="freq-btn active" onclick="setFreq(this,432,'Afinación del universo')">432 Hz</button>
+    <button class="freq-btn" onclick="setFreq(this,528,'Amor y sanación')">528 Hz</button>
+    <button class="freq-btn" onclick="setFreq(this,963,'Conciencia divina')">963 Hz</button>
+  </div>
+  <div class="freq-label" id="freqLabel">432 Hz · Afinación del universo</div>
+  <canvas class="wave-canvas" id="waveCanvas"></canvas>
+
+  <div class="chat-window" id="chatWindow">
+    <div class="msg oracle">
+      <div class="msg-name">✦ Oráculo</div>
+      <div>Soy el guardián de los textos olvidados — el Evangelio de Tomás, el Kybalión, el Corpus Hermeticum. Habla en el idioma de tu alma. / I am the keeper of forgotten texts — speak in the language of your soul.</div>
+    </div>
+    <div class="typing" id="typing"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+  </div>
+
+  <div class="input-row">
+    <input class="q-input" id="qInput" placeholder="Escribe tu pregunta · Write your question..." maxlength="300"/>
+    <button class="send-btn" onclick="askOracle()">✦</button>
+  </div>
+
+  <div class="quick-questions">
+    <button class="quick-q" onclick="useQuick(this)">¿Cuál es el propósito de mi alma en esta vida?</button>
+    <button class="quick-q" onclick="useQuick(this)">What message do my departed loved ones have for me?</button>
+    <button class="quick-q" onclick="useQuick(this)">¿Qué vibración bloquea mi camino espiritual?</button>
+    <button class="quick-q" onclick="useQuick(this)">What does the Kybalion say about my path?</button>
+  </div>
+
+  <div class="divider"></div>
+  <div class="symbols">☽ ✦ ☿ ✦ ☉</div>
+</div>
+
+<script>
+const current=JSON.parse(localStorage.getItem('pe_current')||'null');
+if(!current) window.location.href='index.html';
+
+const starsBg=document.getElementById('stars');
+for(let i=0;i<70;i++){const s=document.createElement('div');s.className='star';const sz=Math.random()*1.5+0.5;s.style.cssText=`width:${sz}px;height:${sz}px;top:${Math.random()*100}%;left:${Math.random()*100}%;--d:${(Math.random()*4+2).toFixed(1)}s;animation-delay:${(Math.random()*4).toFixed(1)}s`;starsBg.appendChild(s);}
+
+const pSvg=document.getElementById('petals'),dSvg=document.getElementById('dots');
+for(let i=0;i<8;i++){const el=document.createElementNS('http://www.w3.org/2000/svg','ellipse');el.setAttribute('cx','0');el.setAttribute('cy','-16');el.setAttribute('rx','4');el.setAttribute('ry','10');el.setAttribute('fill','rgba(212,168,67,0.07)');el.setAttribute('stroke','rgba(212,168,67,0.3)');el.setAttribute('stroke-width','0.5');el.setAttribute('transform',`rotate(${i*45})`);pSvg.appendChild(el);}
+for(let i=0;i<12;i++){const a=(i*30)*Math.PI/180;const d=document.createElementNS('http://www.w3.org/2000/svg','circle');d.setAttribute('cx',Math.cos(a)*36);d.setAttribute('cy',Math.sin(a)*36);d.setAttribute('r','2');d.setAttribute('fill','rgba(212,168,67,0.3)');dSvg.appendChild(d);}
+let mA=0;function animM(){mA+=0.2;pSvg.setAttribute('transform',`rotate(${mA})`);dSvg.setAttribute('transform',`rotate(${-mA*0.5})`);requestAnimationFrame(animM);}animM();
+
+const canvas=document.getElementById('waveCanvas');const ctx=canvas.getContext('2d');
+canvas.width=canvas.offsetWidth*2;canvas.height=80;canvas.style.height='40px';
+let wt=0,cf=432;
+function drawWave(){ctx.clearRect(0,0,canvas.width,canvas.height);const w=canvas.width,h=canvas.height,f=cf===432?2:cf===528?3:5;ctx.beginPath();ctx.strokeStyle='rgba(212,168,67,0.6)';ctx.lineWidth=1.5;for(let x=0;x<w;x++){const y=h/2+Math.sin((x/w)*Math.PI*2*f+wt)*12+Math.sin((x/w)*Math.PI*4+wt*0.7)*4;x===0?ctx.moveTo(x,y):ctx.lineTo(x,y);}ctx.stroke();ctx.beginPath();ctx.strokeStyle='rgba(180,120,200,0.3)';ctx.lineWidth=1;for(let x=0;x<w;x++){const y=h/2+Math.sin((x/w)*Math.PI*2*(f+1)+wt*1.3)*6;x===0?ctx.moveTo(x,y):ctx.lineTo(x,y);}ctx.stroke();wt+=0.04;requestAnimationFrame(drawWave);}drawWave();
+
+function setFreq(btn,hz,desc){document.querySelectorAll('.freq-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');document.getElementById('freqLabel').textContent=hz+' Hz · '+desc;cf=hz;}
+function useQuick(btn){document.getElementById('qInput').value=btn.textContent;askOracle();}
+
+const chatWindow=document.getElementById('chatWindow');const typing=document.getElementById('typing');let history=[];
+
+function addMsg(text,role){const div=document.createElement('div');div.className='msg '+role;const name=document.createElement('div');name.className='msg-name';name.textContent=role==='oracle'?'✦ Oráculo':'· Tú';const body=document.createElement('div');body.textContent=text;div.appendChild(name);div.appendChild(body);chatWindow.insertBefore(div,typing);chatWindow.scrollTop=chatWindow.scrollHeight;}
+
+async function askOracle(){
+  const input=document.getElementById('qInput');const q=input.value.trim();if(!q)return;
+  input.value='';addMsg(q,'user');history.push({role:'user',content:q});
+  typing.classList.add('on');chatWindow.scrollTop=chatWindow.scrollHeight;
+  const system=`You are the Oracle of the Spiritual Portal — a guardian of ancient wisdom drawn from humanity's deepest and most forgotten texts: The Gospel of Thomas, Gospel of Philip, Gospel of Mary Magdalene, the Corpus Hermeticum, The Kybalion and the 7 Hermetic Principles, The Book of Enoch, The Kabbalah and the Tree of Life, The Nag Hammadi library, The Emerald Tablet of Hermes Trismegistus, Ceremonial magic traditions, Alchemical symbolism, and Solfeggio frequencies. LANGUAGE: Detect the language of the user's message and respond in that same language — Spanish or English. TONE: Poetic, deep, wise. Maximum 4 sentences per response. Connect each answer to ancient wisdom.`;
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system,messages:history})});
+    const data=await res.json();
+    const reply=data.content?.map(b=>b.text||'').join('')||'Las frecuencias se han alineado. Pregunta de nuevo.';
+    history.push({role:'assistant',content:reply});typing.classList.remove('on');addMsg(reply,'oracle');
+  }catch(e){typing.classList.remove('on');addMsg('Las vibraciones se interrumpieron. Respira y consulta de nuevo.','oracle');}
+}
+document.getElementById('qInput').addEventListener('keydown',e=>{if(e.key==='Enter')askOracle();});
+</script>
+</body>
+</html>
