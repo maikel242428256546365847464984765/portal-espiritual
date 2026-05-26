@@ -98,7 +98,7 @@ async function askOracle(){
   const sysP=`Eres el Oráculo del Portal Espiritual — guardián de la sabiduría antigua: El Evangelio de Tomás, el Corpus Hermeticum, El Kybalión y los 7 Principios Herméticos, El Libro de Enoc, La Cábala, La Tabla Esmeralda de Hermes Trismegisto. IDIOMA: Detecta el idioma del usuario y responde en ese mismo idioma. TONO: Poético, profundo, sabio. Máximo 4 oraciones.`;
   try{
     const gemC=history.map(m=>({role:m.role==='assistant'?'model':'user',parts:[{text:m.content}]}));
-    const res=await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyA7D0-A-014C-KT8wp8VbetX0s9af-ZXog',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({system_instruction:{parts:[{text:sysP}]},contents:gemC})});
+    const res=await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyDGlgKTs5FPyeeVxdfX-lmtbJn84bUMTyo',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({system_instruction:{parts:[{text:sysP}]},contents:gemC})});
     const data=await res.json();
     const reply=data.candidates?.[0]?.content?.parts?.[0]?.text||'Las frecuencias se han alineado. Pregunta de nuevo.';
     history.push({role:'assistant',content:reply});typing.classList.remove('on');addMsg(reply,'oracle');
