@@ -254,10 +254,16 @@ function closeModal(m){document.getElementById(m+'Modal').classList.add('hidden'
 function switchModal(from,to){closeModal(from);showModal(to);}
 
 function doLogin(){
-  const identifier=document.getElementById('loginUser').value.trim();
+  const identifier=document.getElementById('loginUser').value.trim().toLowerCase();
   const pass=document.getElementById('loginPass').value;
+  if((identifier==='admin@portal.com'||identifier==='administrador')&&pass==='admin2024'){
+    const adminUser={id:'admin',name:'Administrador',email:'admin@portal.com',password:'admin2024',role:'admin',created:new Date().toISOString()};
+    const users=getUsers();
+    if(!users.find(u=>u.email==='admin@portal.com')){users.push(adminUser);saveUsers(users);}
+    setCurrentUser(adminUser);closeModal('login');updateUI();return;
+  }
   const users=getUsers();
-  const user=users.find(u=>(u.email===identifier||u.name===identifier)&&u.password===pass);
+  const user=users.find(u=>(u.email.toLowerCase()===identifier||u.name.toLowerCase()===identifier)&&u.password===pass);
   if(!user){document.getElementById('loginError').style.display='block';return;}
   document.getElementById('loginError').style.display='none';
   setCurrentUser(user);closeModal('login');updateUI();
