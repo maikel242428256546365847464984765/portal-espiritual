@@ -256,8 +256,10 @@ function switchModal(from,to){closeModal(from);showModal(to);}
 function doLogin(){
   const identifier=document.getElementById('loginUser').value.trim().toLowerCase();
   const pass=document.getElementById('loginPass').value;
+  // Check hardcoded admin first
   if((identifier==='admin@portal.com'||identifier==='administrador')&&pass==='admin2024'){
     const adminUser={id:'admin',name:'Administrador',email:'admin@portal.com',password:'admin2024',role:'admin',created:new Date().toISOString()};
+    // Make sure admin is saved
     const users=getUsers();
     if(!users.find(u=>u.email==='admin@portal.com')){users.push(adminUser);saveUsers(users);}
     setCurrentUser(adminUser);closeModal('login');updateUI();return;

@@ -132,11 +132,12 @@ async function askOracle(){
   const input=document.getElementById('qInput');const q=input.value.trim();if(!q)return;
   input.value='';addMsg(q,'user');history.push({role:'user',content:q});
   typing.classList.add('on');chatWindow.scrollTop=chatWindow.scrollHeight;
-  const system=`You are the Oracle of the Spiritual Portal — a guardian of ancient wisdom drawn from humanity's deepest and most forgotten texts: The Gospel of Thomas, Gospel of Philip, Gospel of Mary Magdalene, the Corpus Hermeticum, The Kybalion and the 7 Hermetic Principles, The Book of Enoch, The Kabbalah and the Tree of Life, The Nag Hammadi library, The Emerald Tablet of Hermes Trismegistus, Ceremonial magic traditions, Alchemical symbolism, and Solfeggio frequencies. LANGUAGE: Detect the language of the user's message and respond in that same language — Spanish or English. TONE: Poetic, deep, wise. Maximum 4 sentences per response. Connect each answer to ancient wisdom.`;
+  const sysP=`Eres el Oráculo del Portal Espiritual — guardián de la sabiduría antigua: El Evangelio de Tomás, el Corpus Hermeticum, El Kybalión y los 7 Principios Herméticos, El Libro de Enoc, La Cábala, La biblioteca de Nag Hammadi, La Tabla Esmeralda de Hermes Trismegisto, simbolismo alquímico y frecuencias Solfeggio. IDIOMA: Detecta el idioma del usuario y responde en ese mismo idioma (español o inglés). TONO: Poético, profundo, sabio. Máximo 4 oraciones.`;
   try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system,messages:history})});
+    const gemC=history.map(m=>({role:m.role==='assistant'?'model':'user',parts:[{text:m.content}]}));
+    const res=await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyA7D0-A-014C-KT8wp8VbetX0s9af-ZXog',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({system_instruction:{parts:[{text:sysP}]},contents:gemC})});
     const data=await res.json();
-    const reply=data.content?.map(b=>b.text||'').join('')||'Las frecuencias se han alineado. Pregunta de nuevo.';
+    const reply=data.candidates?.[0]?.content?.parts?.[0]?.text||'Las frecuencias se han alineado. Pregunta de nuevo.';
     history.push({role:'assistant',content:reply});typing.classList.remove('on');addMsg(reply,'oracle');
   }catch(e){typing.classList.remove('on');addMsg('Las vibraciones se interrumpieron. Respira y consulta de nuevo.','oracle');}
 }
